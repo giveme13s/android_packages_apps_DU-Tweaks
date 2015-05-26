@@ -55,5 +55,30 @@
             android:title="@string/enable_task_manager_title"
             android:summary="@string/enable_task_manager_summary" />
 
+    <PreferenceCategory
+        android:title="@string/rr_lockscreen_title">
+
+      <PreferenceScreen
+         android:key="lockscreen_weather"
+         android:title="@string/lock_screen_weather_settings_title"
+         android:summary="@string/lock_screen_weather_settings_title_summary"
+         android:fragment="com.android.settings.rr.LockScreenWeatherSettings" />
+
+    </PreferenceCategory>
+
+   <PreferenceCategory
+        android:key="widgets"
+        android:title="@string/widgets_category" >
+          
+      <PreferenceScreen
+        android:key="lock_clock"
+        android:title="@string/lock_clock_title"
+        android:summary="@string/lock_clock_summary">
+        <intent android:action="android.intent.action.MAIN"
+            android:targetPackage="com.cyanogenmod.lockclock"
+            android:targetClass="com.cyanogenmod.lockclock.preference.Preferences" />
+        </PreferenceScreen>
+
+  </PreferenceCategory>
 </PreferenceScreen>
 
