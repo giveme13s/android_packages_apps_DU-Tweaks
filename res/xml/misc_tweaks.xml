@@ -85,5 +85,16 @@
         </PreferenceScreen>
 
   </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pie_control_title">
+
+      <PreferenceScreen
+         android:key="pie_control"
+         android:title="@string/pie_control_title"
+         android:summary="@string/pie_control_summary"
+         android:fragment="com.android.settings.carbon.PieControl" />
+
+    </PreferenceCategory>
 </PreferenceScreen>
 
