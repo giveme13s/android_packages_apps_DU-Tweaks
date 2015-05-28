@@ -38,5 +38,10 @@
             android:defaultValue="3"
             android:dependency="show_clear_all_recents" />
 
+         <com.dirtyunicorns.dutweaks.preference.SystemSettingSwitchPreference
+            android:key="systemui_recents_mem_display"
+            android:title="@string/recents_show_membar_title"
+            android:summary="@string/recents_show_membar_summary"
+            android:defaultValue="false" />
 </PreferenceScreen>
 
