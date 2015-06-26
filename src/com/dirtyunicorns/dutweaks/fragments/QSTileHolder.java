@@ -18,9 +18,12 @@ package com.dirtyunicorns.dutweaks.fragments;
 
 import android.content.Context;
 
+import android.text.TextUtils;
 import com.android.internal.util.du.QSConstants;
 import com.android.internal.util.du.QSUtils;
 import com.android.settings.R;
+
+import java.util.Arrays;
 
 /**
  * This class holds the icon, the name - or the string the user sees,
@@ -45,6 +48,18 @@ public class QSTileHolder {
 
         if (!TILE_ADD_DELETE.equals(tileType) &&
                 !QSUtils.getAvailableTiles(context).contains(tileType)) {
+            return null;
+        }
+
+        // We need to filter out the LTE tile manually, because
+        // filtering via getAvailableTiles during fwb init
+        // disallows reading our system prop
+        // Hide the tile if device doesn't support LTE
+        // or it supports Dual Sim Dual Active.
+        // TODO: Should be spawning off a tile per sim
+        if (TextUtils.equals(QSConstants.TILE_LTE, tileType)
+                && (!QSUtils.deviceSupportsLte(context)
+                || QSUtils.deviceSupportsDdsSupported(context))) {
             return null;
         }
 
@@ -119,7 +134,7 @@ public class QSTileHolder {
                 resourceName = "ic_qs_sync_on";
                 stringId = R.string.qs_title_sync;
                 break;
-	    case QSConstants.TILE_HEADS_UP:
+	    	case QSConstants.TILE_HEADS_UP:
                 resourceName = "ic_qs_heads_up_on";
                 stringId = R.string.qs_tile_headsup;
                 break;
@@ -135,10 +150,6 @@ public class QSTileHolder {
                 resourceName = "ic_qs_brightness_auto_off";
                 stringId = R.string.qs_brightness_tile;
                 break;
-            case QSConstants.TILE_NAVBAR:
-                resourceName = "ic_qs_navbar_on";
-                stringId = R.string.qs_navbar_tile;
-                break;
             case QSConstants.TILE_APPCIRCLEBAR:
                 resourceName = "ic_qs_appcirclebar_on";
                 stringId = R.string.qs_appcirclebar_tile;
@@ -150,6 +161,26 @@ public class QSTileHolder {
             case QSConstants.TILE_MUSIC:
                 resourceName = "ic_qs_media_play";
                 stringId = R.string.qs_music_play_tile;
+                break;
+            case QSConstants.TILE_ADB_NETWORK:
+                resourceName = "ic_qs_network_adb_on";
+                stringId = R.string.adb_over_network;
+                break;
+            case QSConstants.TILE_NFC:
+                resourceName = "ic_qs_nfc_on";
+                stringId = R.string.qs_tile_nfc;
+                break;
+            case QSConstants.TILE_COMPASS:
+                resourceName = "ic_qs_compass_on";
+                stringId = R.string.qs_title_compass;
+                break;
+            case QSConstants.TILE_LTE:
+                resourceName = "ic_qs_lte_on";
+                stringId = R.string.qs_tile_lte;
+                break;
+			case QSConstants.TILE_VISUALIZER:
+                resourceName = "ic_qs_visualizer_static";
+                stringId = R.string.qs_tile_visualizer;
                 break;
             default:
                 return null;
