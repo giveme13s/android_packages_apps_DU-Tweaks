@@ -442,7 +442,6 @@
     <string name="qs_tile_nfc">NFC</string>
     <string name="qs_title_compass">Compass</string>
     <string name="qs_tile_lte">LTE</string>
-    <string name="qs_tile_visualizer">AudioFX</string> 
 
     <!-- Text for forcing expanded notifications -->
     <string name="disable_fc_notifications_title">Disable FC Notifications</string>
@@ -771,5 +770,5 @@
 		<!-- Advanced location settings -->
     <string name="qs_advanced_location_title">Advanced location settings</string>
     <string name="qs_advanced_location_summary">Enable advanced settings for location in Quick Settings</string>
-
+		
 </resources>
