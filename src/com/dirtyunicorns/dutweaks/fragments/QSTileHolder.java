@@ -174,6 +174,14 @@ public class QSTileHolder {
                 resourceName = "ic_qs_compass_on";
                 stringId = R.string.qs_title_compass;
                 break;
+            case QSConstants.TILE_NAVBAR:
+                resourceName = "ic_qs_navbar_on";
+                stringId = R.string.qs_navbar_tile;
+                break;
+            case QSConstants.TILE_PIE:
+                resourceName = "ic_qs_pie_on";
+                stringId = R.string.qs_pie_tile;
+                break;
             case QSConstants.TILE_LTE:
                 resourceName = "ic_qs_lte_on";
                 stringId = R.string.qs_tile_lte;
