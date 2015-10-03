@@ -118,6 +118,10 @@ public class QSTileHolder {
                 resourceName = "ic_qs_usb_tether_on";
                 stringId = R.string.qs_tile_usb_tether;
                 break;
+            case QSConstants.TILE_VOLUME:
+                resourceName = "ic_qs_volume_panel";
+                stringId = R.string.qs_tile_volume_panel;
+                break;
             case QSConstants.TILE_SCREENSHOT:
                 resourceName = "ic_qs_screenshot";
                 stringId = R.string.qs_title_screenshot;
@@ -178,6 +182,10 @@ public class QSTileHolder {
                 resourceName = "ic_qs_navbar_on";
                 stringId = R.string.qs_navbar_tile;
                 break;
+           case QSConstants.TILE_EXPANDED_DESKTOP:
+                resourceName = "ic_qs_expanded_desktop";
+                stringId = R.string.qs_expanded_desktop_tile;
+                break;
             case QSConstants.TILE_PIE:
                 resourceName = "ic_qs_pie_on";
                 stringId = R.string.qs_pie_tile;
@@ -185,6 +193,14 @@ public class QSTileHolder {
             case QSConstants.TILE_LTE:
                 resourceName = "ic_qs_lte_on";
                 stringId = R.string.qs_tile_lte;
+                break;
+            case QSConstants.TILE_POWER_MENU:
+                resourceName = "ic_qs_power";
+                stringId = R.string.qs_tile_powermenu;
+                break;
+            case QSConstants.TILE_SCREEN_OFF:
+                resourceName = "ic_qs_power";
+                stringId = R.string.qs_screen_off_tile;
                 break;
             default:
                 return null;
