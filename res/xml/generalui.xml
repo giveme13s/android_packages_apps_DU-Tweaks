@@ -17,7 +17,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/generalui_category"
-    android:layout="@layout/preference_tab"
+    android:layout="@layout/tab"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
 
          <PreferenceScreen
@@ -31,24 +31,6 @@
             android:title="@string/lcd_density_title"
             android:layout="@layout/preference_density"
             android:fragment="com.dirtyunicorns.dutweaks.fragments.Density" />
-
-        <PreferenceScreen
-            android:key="lockscreen_shortcuts_settings"
-            android:title="@string/lockscreen_targets_message"
-            android:layout="@layout/preference_lockscreentargets"
-            android:fragment="com.dirtyunicorns.dutweaks.fragments.LockscreenShortcuts" />
-
-        <PreferenceScreen
-                 android:key="lockscreen_shortcuts"
-                 android:fragment="com.dirtyunicorns.dutweaks.dslv.ActionListViewSettings"
-                 android:title="@string/lockscreen_shortcuts_title"
-                 android:layout="@layout/preference_appshortcuts" >
-             <extra android:name="actionMode" android:value="4" />
-             <extra android:name="maxAllowedActions" android:value="5" />
-             <extra android:name="disableLongpress" android:value="true" />
-             <extra android:name="useAppPickerOnly" android:value="true" />
-             <extra android:name="fragment" android:value="com.dirtyunicorns.dutweaks.fragments.AppShortcuts" />
-        </PreferenceScreen>
 
 </PreferenceScreen>
 

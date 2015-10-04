@@ -528,9 +528,6 @@
     <string name="qs_pie_tile">Pie</string>
     <string name="qs_expanded_desktop_tile">Expanded Desktop</string>
     <string name="qs_tile_volume_panel">Volume panel</string>
-    <string name="qs_tile_lte">LTE</string>
-    <string name="qs_tile_powermenu">Power menu</string>
-    <string name="qs_screen_off_tile">Screen off</string>
 
     <!-- Text for forcing expanded notifications -->
     <string name="disable_fc_notifications_title">Disable FC Notifications</string>
@@ -929,17 +926,5 @@
     <!-- Long press on lock screen lock icon to launch torch-->
     <string name="longpress_lock_icon_torch_title">Long press lock icon to launch torch</string>
     <string name="longpress_lock_icon_torch_summary">This option will not work if both smart lock and accessibility touch exploration are enabled</string>
-
-	<!-- Advanced location settings -->
-    <string name="qs_advanced_location_title">Advanced location settings</string>
-    <string name="qs_advanced_location_summary">Enable advanced settings for location in Quick Settings</string>
-
-    <!-- Lockscreen see through -->
-    <string name="lockscreen_see_through_title">Lockscreen blur</string>
-    <string name="lockscreen_see_through_summary">Blurs and displays the content behind your lockscreen.</string>
-    <string name="lockscreen_blur_radius">Blur effect intensity</string> 
-
-    <!-- On-The-Go -->
-    <string name="power_menu_onthego_title">On-The-Go Mode</string>
 
 </resources>

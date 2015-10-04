@@ -25,16 +25,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
@@ -47,14 +42,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.internal.util.slim.DeviceUtils;
 import com.dirtyunicorns.dutweaks.tabs.GeneralUI;
 import com.dirtyunicorns.dutweaks.tabs.StatusBar;
+import com.dirtyunicorns.dutweaks.tabs.Lockscreen;
 import com.dirtyunicorns.dutweaks.tabs.Navigation;
 import com.dirtyunicorns.dutweaks.tabs.MultiTasking;
 import com.dirtyunicorns.dutweaks.tabs.System;
 import com.dirtyunicorns.dutweaks.tabs.Misc;
 import com.dirtyunicorns.dutweaks.PagerSlidingTabStrip;
+import com.android.internal.util.slim.DeviceUtils;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import java.util.ArrayList;
@@ -75,7 +71,7 @@ public class DirtyTweaks extends SettingsPreferenceFragment {
         mContainer = container;
 
         View view = inflater.inflate(R.layout.preference_generalui, container, false);
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mTabs = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         StatusBarAdapter StatusBarAdapter = new StatusBarAdapter(getFragmentManager());
         mViewPager.setAdapter(StatusBarAdapter);
@@ -173,10 +169,11 @@ public class DirtyTweaks extends SettingsPreferenceFragment {
             super(fm);
             frags[0] = new GeneralUI();
             frags[1] = new StatusBar();
-            frags[2] = new Navigation();
-            frags[3] = new MultiTasking();
-            frags[4] = new System();
-            frags[5] = new Misc();
+            frags[2] = new Lockscreen();
+            frags[3] = new Navigation();
+            frags[4] = new MultiTasking();
+            frags[5] = new System();
+            frags[6] = new Misc();
         }
 
         @Override
@@ -201,6 +198,7 @@ public class DirtyTweaks extends SettingsPreferenceFragment {
         titleString = new String[]{
                     getString(R.string.generalui_category),
                     getString(R.string.statusbar_category),
+                    getString(R.string.lockscreen_category),
                     getString(R.string.navigation_category),
                     getString(R.string.multitasking_category),
                     getString(R.string.system_category),
@@ -209,6 +207,7 @@ public class DirtyTweaks extends SettingsPreferenceFragment {
         titleString = new String[]{
                     getString(R.string.generalui_category),
                     getString(R.string.statusbar_category),
+                    getString(R.string.lockscreen_category),
                     getString(R.string.navigation_category),
                     getString(R.string.multitasking_category),
                     getString(R.string.system_category),

@@ -18,12 +18,9 @@ package com.dirtyunicorns.dutweaks.fragments;
 
 import android.content.Context;
 
-import android.text.TextUtils;
 import com.android.internal.util.du.QSConstants;
 import com.android.internal.util.du.QSUtils;
 import com.android.settings.R;
-
-import java.util.Arrays;
 
 /**
  * This class holds the icon, the name - or the string the user sees,
@@ -48,18 +45,6 @@ public class QSTileHolder {
 
         if (!TILE_ADD_DELETE.equals(tileType) &&
                 !QSUtils.getAvailableTiles(context).contains(tileType)) {
-            return null;
-        }
-
-        // We need to filter out the LTE tile manually, because
-        // filtering via getAvailableTiles during fwb init
-        // disallows reading our system prop
-        // Hide the tile if device doesn't support LTE
-        // or it supports Dual Sim Dual Active.
-        // TODO: Should be spawning off a tile per sim
-        if (TextUtils.equals(QSConstants.TILE_LTE, tileType)
-                && (!QSUtils.deviceSupportsLte(context)
-                || QSUtils.deviceSupportsDdsSupported(context))) {
             return null;
         }
 
@@ -138,7 +123,7 @@ public class QSTileHolder {
                 resourceName = "ic_qs_sync_on";
                 stringId = R.string.qs_title_sync;
                 break;
-	    	case QSConstants.TILE_HEADS_UP:
+	    case QSConstants.TILE_HEADS_UP:
                 resourceName = "ic_qs_heads_up_on";
                 stringId = R.string.qs_tile_headsup;
                 break;
@@ -189,18 +174,6 @@ public class QSTileHolder {
             case QSConstants.TILE_PIE:
                 resourceName = "ic_qs_pie_on";
                 stringId = R.string.qs_pie_tile;
-                break;
-            case QSConstants.TILE_LTE:
-                resourceName = "ic_qs_lte_on";
-                stringId = R.string.qs_tile_lte;
-                break;
-            case QSConstants.TILE_POWER_MENU:
-                resourceName = "ic_qs_power";
-                stringId = R.string.qs_tile_powermenu;
-                break;
-            case QSConstants.TILE_SCREEN_OFF:
-                resourceName = "ic_qs_power";
-                stringId = R.string.qs_screen_off_tile;
                 break;
             default:
                 return null;

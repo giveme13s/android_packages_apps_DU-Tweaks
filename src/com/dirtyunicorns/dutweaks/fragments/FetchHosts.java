@@ -24,17 +24,17 @@ import com.dirtyunicorns.dutweaks.fragments.HfmHelpers;
 public class FetchHosts {
 
     public static String[] stringUrl = {
-        "http://hosts-file.net/.%5Cad_servers.txt",
-        "http://winhelp2002.mvps.org/hosts.txt",
-        "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext",
-        "http://adaway.org/hosts.txt"
+        "http://download.dirtyunicorns.com/files/misc/hosts/hosts1.txt",
+        "http://download.dirtyunicorns.com/files/misc/hosts/hosts2.txt",
+        "http://download.dirtyunicorns.com/files/misc/hosts/hosts3.txt",
+        "http://download.dirtyunicorns.com/files/misc/hosts/hosts4.txt"
     };
 
     public static int successfulSources;
 
     public static void fetch() throws IOException {
 
-        String cmd = "mount -o rw,remount /system && echo \'foo\' > /etc/started.cfg && sed -i -e '$G' /etc/hosts.alt_orig";
+        String cmd = "mount -o rw,remount /system && echo \'foo\' > /etc/started.cfg && sed -i -e '$G' /etc/hosts.alt";
 
         successfulSources = 0;
 
@@ -48,12 +48,10 @@ public class FetchHosts {
             i++;
         }
 
-        cmd = cmd + " && cat /etc/hosts[0-9] /etc/hosts.alt_orig > /etc/hosts.tmp" //Merge old & new hosts
+        cmd = cmd + " && cat /etc/hosts[0-9] /etc/hosts.alt > /etc/hosts.tmp" //Merge old & new hosts
                   + " && sort -u /etc/hosts.tmp -o /etc/hosts.tmp" //Remove duplicate lines
                   + " && sed -i '/^[@#]/ d' /etc/hosts.tmp" //Remove commented lines
                   + " && sed -i '/^$/d' /etc/hosts.tmp" //Remove blank lines
-                  + " && sed -i '1i#LiquidSmooth\' /etc/hosts.tmp" // Add LiquidSmooth tag
-                  + " && cp -f /etc/hosts.tmp /etc/hosts.alt_orig"
                   + " && cp -f /etc/hosts.tmp /etc/hosts.alt"
                   + " && rm -f /etc/hosts[0-9] /etc/hosts.tmp /etc/started.cfg" //Clean up
                   + " && mount -o ro,remount /system";

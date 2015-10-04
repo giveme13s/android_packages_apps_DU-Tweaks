@@ -16,14 +16,17 @@
 
 package com.dirtyunicorns.dutweaks.fragments;
 
-import android.app.ActivityManager;
-import android.app.admin.DeviceAdminReceiver;
-import android.app.admin.DevicePolicyManager;
-import android.content.Context;
+
+import java.io.InputStreamReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.BufferedReader;
+
+import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.UserHandle;
+import android.os.SystemProperties;
+import android.preference.ListPreference;
 import android.preference.SwitchPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -33,43 +36,71 @@ import android.preference.SeekBarPreference;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 
-import com.dirtyunicorns.dutweaks.Helpers;
-
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
 
+import com.android.internal.util.du.QSUtils;
+
+import com.dirtyunicorns.dutweaks.CMDProcessor;
+
 public class MiscTweaks extends SettingsPreferenceFragment implements OnPreferenceChangeListener {
 
-    private static final String DISABLE_IMMERSIVE_MESSAGE = "disable_immersive_message";
+    private static final String SELINUX = "selinux";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
-    private static final String FORCE_EXPANDED_NOTIFICATIONS = "force_expanded_notifications";
     private static final String ENABLE_TASK_MANAGER = "enable_task_manager";
+    private static final String DISABLE_TORCH_ON_SCREEN_OFF = "disable_torch_on_screen_off";
+    private static final String DISABLE_TORCH_ON_SCREEN_OFF_DELAY = "disable_torch_on_screen_off_delay";
+    private static final String SCROLLINGCACHE_PREF = "pref_scrollingcache";
+    private static final String SCROLLINGCACHE_PERSIST_PROP = "persist.sys.scrollingcache";
+    private static final String SCROLLINGCACHE_DEFAULT = "1";
 
-    private SwitchPreference mDisableIM;
+    private SwitchPreference mSelinux;
     private SwitchPreference mStatusBarBrightnessControl;
-    private SwitchPreference mForceExpanded;
     private SwitchPreference mEnableTaskManager;
+    private SwitchPreference mTorchOff;
+    private ListPreference mTorchOffDelay;
+    private ListPreference mScrollingCachePref;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
         addPreferencesFromResource(R.xml.misc_tweaks);
+        ContentResolver resolver = getActivity().getContentResolver();
+        Activity activity = getActivity();
+        PreferenceScreen prefSet = getPreferenceScreen();
 
-        final ContentResolver resolver = getActivity().getContentResolver();
+        mSelinux = (SwitchPreference) findPreference(SELINUX);
+        mSelinux.setOnPreferenceChangeListener(this);
 
-        mDisableIM = (SwitchPreference) findPreference(DISABLE_IMMERSIVE_MESSAGE);
-        mDisableIM.setChecked((Settings.System.getInt(resolver,
-                Settings.System.DISABLE_IMMERSIVE_MESSAGE, 0) == 1));
-
-	mForceExpanded = (SwitchPreference) findPreference(FORCE_EXPANDED_NOTIFICATIONS);
-        mForceExpanded.setChecked((Settings.System.getInt(resolver,
-                Settings.System.FORCE_EXPANDED_NOTIFICATIONS, 0) == 1));
+        if (CMDProcessor.runSuCommand("getenforce").getStdout().contains("Enforcing")) {
+            mSelinux.setChecked(true);
+            mSelinux.setSummary(R.string.selinux_enforcing_title);
+        } else {
+            mSelinux.setChecked(false);
+            mSelinux.setSummary(R.string.selinux_permissive_title);
+        }
 
         mEnableTaskManager = (SwitchPreference) findPreference(ENABLE_TASK_MANAGER);
         mEnableTaskManager.setChecked((Settings.System.getInt(resolver,
                 Settings.System.ENABLE_TASK_MANAGER, 0) == 1));
+
+        mTorchOff = (SwitchPreference) prefSet.findPreference(DISABLE_TORCH_ON_SCREEN_OFF);
+        mTorchOffDelay = (ListPreference) prefSet.findPreference(DISABLE_TORCH_ON_SCREEN_OFF_DELAY);
+        int torchOffDelay = Settings.System.getInt(resolver,
+                Settings.System.DISABLE_TORCH_ON_SCREEN_OFF_DELAY, 10);
+        mTorchOffDelay.setValue(String.valueOf(torchOffDelay));
+        mTorchOffDelay.setSummary(mTorchOffDelay.getEntry());
+        mTorchOffDelay.setOnPreferenceChangeListener(this);
+        if (!QSUtils.deviceSupportsFlashLight(activity)) {
+            prefSet.removePreference(mTorchOff);
+            prefSet.removePreference(mTorchOffDelay);
+        }
+
+        mScrollingCachePref = (ListPreference) prefSet.findPreference(SCROLLINGCACHE_PREF);
+        mScrollingCachePref.setValue(SystemProperties.get(SCROLLINGCACHE_PERSIST_PROP,
+                SystemProperties.get(SCROLLINGCACHE_PERSIST_PROP, SCROLLINGCACHE_DEFAULT)));
+        mScrollingCachePref.setOnPreferenceChangeListener(this);
 
         mStatusBarBrightnessControl = (SwitchPreference) findPreference(STATUS_BAR_BRIGHTNESS_CONTROL);
         mStatusBarBrightnessControl.setOnPreferenceChangeListener(this);
@@ -92,35 +123,38 @@ public class MiscTweaks extends SettingsPreferenceFragment implements OnPreferen
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if  (preference == mDisableIM) {
-            boolean checked = ((SwitchPreference)preference).isChecked();
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.DISABLE_IMMERSIVE_MESSAGE, checked ? 1:0);
-            return true;
-        }
-        if  (preference == mForceExpanded) {
-            boolean checked = ((SwitchPreference)preference).isChecked();
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.FORCE_EXPANDED_NOTIFICATIONS, checked ? 1:0);
-            return true;
-        }
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        ContentResolver resolver = getActivity().getContentResolver();
         if  (preference == mEnableTaskManager) {
             boolean checked = ((SwitchPreference)preference).isChecked();
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.ENABLE_TASK_MANAGER, checked ? 1:0);
-            Helpers.restartSystemUI();
             return true;
-        }
-        return super.onPreferenceTreeClick(preferenceScreen, preference);
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mStatusBarBrightnessControl) {
-            boolean value = (Boolean) objValue;
+        } else if (preference == mStatusBarBrightnessControl) {
+            boolean value = (Boolean) newValue;
             Settings.System.putInt(getContentResolver(), STATUS_BAR_BRIGHTNESS_CONTROL,
                     value ? 1 : 0);
+            return true;
+        } else if (preference == mScrollingCachePref) {
+            if (newValue != null) {
+                SystemProperties.set(SCROLLINGCACHE_PERSIST_PROP, (String)newValue);
+            return true;
+            }
+        } else if (preference == mTorchOffDelay) {
+            int torchOffDelay = Integer.valueOf((String) newValue);
+            int index = mTorchOffDelay.findIndexOfValue((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.DISABLE_TORCH_ON_SCREEN_OFF_DELAY, torchOffDelay);
+            mTorchOffDelay.setSummary(mTorchOffDelay.getEntries()[index]);
+            return true;
+        } else if (preference == mSelinux) {
+            if (newValue.toString().equals("true")) {
+                CMDProcessor.runSuCommand("setenforce 1");
+                mSelinux.setSummary(R.string.selinux_enforcing_title);
+            } else if (newValue.toString().equals("false")) {
+                CMDProcessor.runSuCommand("setenforce 0");
+                mSelinux.setSummary(R.string.selinux_permissive_title);
+            }
             return true;
         }
         return false;
